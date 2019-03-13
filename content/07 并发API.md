@@ -215,11 +215,11 @@ bool doWork(std::function<bool(int)> filter, int maxVal = tenMillion)
 * 销毁可合并的std::thread对象会导致程序终止，另外两个选择（隐式join和隐式detach）则更糟。销毁future有时表现为隐式join，有时表现为隐式detach，有时表现为既不隐式join也不隐式detach，但它不会导致程序终止。这套线程handle行为的不同表现是值得需要思考的
 * 想象future处于信道的一端，callee通过借助一个std::promise对象把结果传给caller，caller用一个future来读取结果
 
-![](https://upload-images.jianshu.io/upload_images/5587614-988a3d33b1ceb7ec.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](https://github.com/downdemo/Effective-Modern-CPP/blob/master/images/7-1.png)
 
 * 考虑问题，callee的结果存储在哪？caller调用get之前，callee可能已经执行完毕，因此结果不可能存储在callee的std::promise对象中。但结果也不可能存储在caller的future中，因为可能会用std::future创建std::shared_future，而std::shared_future在原始的std::future析构后仍然可以复制。因此结果只能存储在外部某个位置，这个位置称为shared state
 
-![](https://upload-images.jianshu.io/upload_images/5587614-532d9df6e30a7b55.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
+![](https://github.com/downdemo/Effective-Modern-CPP/blob/master/images/7-2.png)
 
 * shared state通常用堆上的对象表示，但类型、接口和具体实现由标准库作者决定。shared state很重要，它决定了future的析构函数的行为：
   * 通过std::aysnc创建的一个非推迟任务的future中，最后一个引用shared state的，析构函数会保持阻塞，直到任务完成。本质上，这样一个future的析构函数是对异步运行的底层线程执行了一次隐式join
