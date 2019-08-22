@@ -1,4 +1,4 @@
-> ## 05 使用auto替代显式类型声明
+## 05 使用auto替代显式类型声明
 * auto声明的变量必须初始化，因此使用auto可以避免忘记初始化的问题
 ```cpp
 int x1; // 潜在的未初始化风险
@@ -75,7 +75,7 @@ for (const std::pair<std::string, int>& p : m)
 * std::unordered_map的key是const，因此哈希表中的std::pair应该是std::pair<const std::string, int>，因此对上述代码，编译器要将std::pair<const std::string, int>转为std::pair<std::string, int>，这样对容器的每个对象都要拷贝出一个临时对象，再把p绑定到其上，每次迭代结束再析构，如果期间对p取地址，得到的也是临时对象的指针。使用auto就可以避免这个问题
 * 使用auto最需要关心的也许是代码可读性上，但不必过于担心，auto是可选项而非必选项，如果显式类型声明能让代码更清晰或有其他好处，依然可以用显式类型声明，此外IDE的类型提示也能缓解不能直接看出对象类型的问题
 
-> ## 06 auto推断出非预期类型时，使用explicitly typed initializer手法
+## 06 auto推断出非预期类型时，使用explicitly typed initializer手法
 * 假设一个函数返回vector<bool>，其中每个bool元素相当于一个判断标记
 ```cpp
 std::vector<bool> features(const Widget& w);
