@@ -5,10 +5,10 @@
 
 ## [1. 类型推断](https://github.com/downdemo/Effective-Modern-Cpp/tree/master/content/01%20%E7%B1%BB%E5%9E%8B%E6%8E%A8%E6%96%AD.md)
 
- * 01 理解模板类型推断
- * 02 理解auto类型推断
- * 03 理解decltype
- * 04 查看推断类型的方法
+* 01 理解模板类型推断
+* 02 理解auto类型推断
+* 03 理解decltype
+* 04 查看推断类型的方法
 
 ## [2. auto](https://github.com/downdemo/Effective-Modern-Cpp/tree/master/content/02%20auto.md)
 
