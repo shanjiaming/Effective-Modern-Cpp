@@ -145,7 +145,7 @@ int main()
 10
 ```
 
-## 31 避免默认捕获模式
+## 31 默认捕获的潜在问题
 * 默认的引用捕获可能导致空悬引用，默认的值捕获会让人误以为可以避免空悬引用的问题，以及闭包是独立的（实际上可能不是），这节将具体解释默认捕获模式的危害
 * 引用捕获会导致闭包包含指向局部变量的引用，或定义lambda的作用域内的形参的引用。如果lambda创建的闭包超过了该局部变量或形参的生命期，闭包内的引用就会空悬
 ```cpp
@@ -264,7 +264,7 @@ void addDivisorFilter()
 }
 ```
 
-## 32 使用初始化捕获将对象移入闭包
+## 32 用初始化捕获将对象移入闭包
 * C++14中提供了初始化捕获，用于将对象移动进闭包
 ```cpp
 class Widget { // some useful type
@@ -334,7 +334,7 @@ auto f3 =
 ```
 * 因为bind对象的生命期和闭包相同，所以对bind对象中的对象和闭包中的对象可以用同样的手法处理
 
-## 33 对auto&&类型形参使用decltype来std::forward
+## 33 用[decltype](https://en.cppreference.com/w/cpp/language/decltype)获取auto&&参数类型以[std::forward](https://en.cppreference.com/w/cpp/utility/forward)
 * C++14中，lambda的形参可以声明为auto，这种lambda称为泛型lambda（generic lambda）
 * 泛型lambda闭包类中的operator()使用模板实现
 ```cpp
@@ -367,7 +367,7 @@ auto f = [](auto&&... args)
     { return func(normalize(std::forward<decltype(args)>(args)...)); };
 ```
 
-## 34 使用lambda替代std::bind
+## 34 用lambda替代[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)
 * 这节将阐述lambda比起std::bind的几个优点
   * lambda代码更简洁，std::bind的占位符的可读性差
   * 实参绑定的是std::bind的返回对象而非内部的函数

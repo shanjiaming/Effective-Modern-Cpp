@@ -1,4 +1,4 @@
-## 35 使用std::async替代std::thread
+## 35 用[std::async](https://en.cppreference.com/w/cpp/thread/async)替代[std::thread](https://en.cppreference.com/w/cpp/thread/thread)
 * 异步运行函数的一种选择是，创建一个std::thread来运行，这称为基于线程的（thread-based）方法
 ```cpp
 int f();
@@ -32,7 +32,7 @@ auto ft = std::async(f); // 由标准库的实现者负责线程管理
   * 需要为应用优化线程用法：比如开发一个服务器软件，运行时的profile已知并作为唯一的主进程部署在硬件特性固定的机器上
   * 需要实现超出C++并发API的线程技术：比如在C++未提供线程池实现的平台上实现线程池
 
-## 36 需要异步则指定std::launch::async
+## 36 用[std::launch::async](https://en.cppreference.com/w/cpp/thread/launch)指定异步求值
 * std::async有两种标准启动策略：
   * std::launch::async：函数必须异步运行，即运行在不同的线程上
   * std::launch::deferred：函数只在返回的std::future调用get或wait时运行。即执行会推迟，调用get或wait时函数会同步运行，调用方会阻塞至函数运行结束
@@ -124,7 +124,7 @@ auto reallyAsync(F&& f, Ts&&... params)
 }
 ``` 
 
-## 37 让std::thread对象在所有路径上不可合并（unjoinable）
+## 37 RAII线程管理
 * 每个std::thread对象都处于可合并或不可合并的状态。一个可合并的std::thread对应于一个底层异步运行的线程，若底层线程处于阻塞、等待调度或已运行结束的状态，则此std::thread可合并，若不处于这种状态则std::thread不可合并。不可合并的std::thread包括：
   * 默认构造的std::thread：此时没有要运行的函数，因此没有对应的底层运行线程
   * 已移动的std::thread：移动操作导致一个std::thread的底层线程被用于另一个std::thread
@@ -209,7 +209,7 @@ bool doWork(std::function<bool(int)> filter, int maxVal = tenMillion)
 ```
 * 这里选择在ThreadRAII析构函数中对异步执行线程调用join，虽然join会导致性能异常，但比起detach会导致未定义行为的调试噩梦，以及只使用std::thread导致的程序终止，性能异常是权衡之下的最佳选择
 
-## 38 线程handle的析构函数的不同行为
+## 38 线程对象的析构行为
 * 可合并的线程对应一个底层系统线程，未推迟的任务的future和系统线程也有类似的关系，因此可以认为std::thread和future相当于系统线程的handle
 * 销毁可合并的std::thread对象会导致程序终止，另外两个选择（隐式join和隐式detach）则更糟。销毁future有时表现为隐式join，有时表现为隐式detach，有时表现为既不隐式join也不隐式detach，但它不会导致程序终止。这套线程handle行为的不同表现是值得需要思考的
 * 想象future处于信道的一端，callee通过借助一个std::promise对象把结果传给caller，caller用一个future来读取结果
@@ -233,7 +233,7 @@ bool doWork(std::function<bool(int)> filter, int maxVal = tenMillion)
 ```cpp
 // this container might block in its dtor, because one or more contained futures
 // could refer to a shared state for a non-deferred task launched via std::async
-std::vector<std::future<void>> futs;
+std::vector<std::future<void>> fts;
 
 class Widget { // Widget类型对象可能会在析构函数中阻塞
 public:
@@ -406,7 +406,7 @@ void detect()
 }
 ```
 
-## 40 对并发使用std::atomic，对特殊内存使用volatile
+## 40 对并发使用[std::atomic](https://en.cppreference.com/w/cpp/atomic/atomic)，对特殊内存使用volatile
 * volatile本来和并发程序设计毫无关系，但有时会和std::atomic混淆
 * std::atomic提供的操作可以保证被其他线程视为原子的，如同这些操作处于mutex保护的临界区一样，但实际上这些操作通常会用特殊的机器指令实现，这比mutex更高效。考虑以下代码：
 ```cpp
