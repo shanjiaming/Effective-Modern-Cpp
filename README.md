@@ -35,7 +35,7 @@
 * 19 用[std::shared_ptr](https://en.cppreference.com/w/cpp/memory/shared_ptr)管理所有权可共享的资源
 * 20 用[std::weak_ptr](https://en.cppreference.com/w/cpp/memory/weak_ptr)观测[std::shared_ptr](https://en.cppreference.com/w/cpp/memory/shared_ptr)的内部状态
 * 21 用[std::make_unique](https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique)（[std::make_shared](https://en.cppreference.com/w/cpp/memory/shared_ptr/make_shared)）创建[std::unique_ptr](https://en.cppreference.com/w/cpp/memory/unique_ptr)（[std::shared_ptr](https://en.cppreference.com/w/cpp/memory/shared_ptr)）
-* 22 用[std::unique_ptr](https://en.cppreference.com/w/cpp/memory/unique_ptr)实现pimpl手法必须在.cpp文件中定义析构函数
+* 22 用[std::unique_ptr](https://en.cppreference.com/w/cpp/memory/unique_ptr)实现[pimpl手法](https://en.cppreference.com/w/cpp/language/pimpl)必须在.cpp文件中提供析构函数定义
 
 ## [5. 右值引用、移动语义和完美转发](https://github.com/downdemo/Effective-Modern-Cpp/tree/master/content/05%20%E5%8F%B3%E5%80%BC%E5%BC%95%E7%94%A8%E3%80%81%E7%A7%BB%E5%8A%A8%E8%AF%AD%E4%B9%89%E5%92%8C%E5%AE%8C%E7%BE%8E%E8%BD%AC%E5%8F%91.md)
 
