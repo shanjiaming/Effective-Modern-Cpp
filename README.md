@@ -42,7 +42,7 @@
 * 23 [std::move](https://en.cppreference.com/w/cpp/utility/move)和[std::forward](https://en.cppreference.com/w/cpp/utility/forward)只是一种强制类型转换
 * 24 转发引用与右值引用的区别
 * 25 对右值引用使用[std::move](https://en.cppreference.com/w/cpp/utility/move)，对转发引用使用[std::forward](https://en.cppreference.com/w/cpp/utility/forward)
-* 26 避免重载转发引用
+* 26 避免重载使用转发引用的函数
 * 27 重载转发引用的替代方案
 * 28 引用折叠
 * 29 移动不比拷贝快的情况
