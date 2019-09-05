@@ -50,7 +50,7 @@
 
 ## [6. lambda表达式](https://github.com/downdemo/Effective-Modern-Cpp/tree/master/content/06%20lambda%E8%A1%A8%E8%BE%BE%E5%BC%8F.md)
 
-* 31 默认捕获的潜在问题
+* 31 捕获的潜在问题
 * 32 用初始化捕获将对象移入闭包
 * 33 用[decltype](https://en.cppreference.com/w/cpp/language/decltype)获取auto&&参数类型以[std::forward](https://en.cppreference.com/w/cpp/utility/forward)
 * 34 用lambda替代[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)
