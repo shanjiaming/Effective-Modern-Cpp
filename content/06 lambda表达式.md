@@ -14,7 +14,7 @@ auto f = [&x] { return x; };
 x = 42;
 std::cout << f(); // 42
 ```
-* 引用捕获时，在捕获的局部变量析构后调用lambda，将出现空悬引用
+* 引用捕获时，在捕获的局部变量析构后调用 lambda，将出现空悬引用
 ```cpp
 std::function<void()> f()
 {
@@ -37,7 +37,7 @@ struct A {
 A a;
 a.f()(); // 1
 ```
-* 上述代码看似没有问题，但如果把=去掉，或者显式捕获，就会出现无法捕获的错误。原因在于数据成员位于lambda作用域外，不能被捕获
+* 上述代码看似没有问题，但如果把=去掉，或者显式捕获，就会出现无法捕获的错误。原因在于数据成员位于 lambda 作用域外，不能被捕获
 ```cpp
 struct A {
     auto f()
@@ -47,7 +47,7 @@ struct A {
     int i = 1;
 };
 ```
-* 之前不出错的原因在于，=捕获的是this指针。因为捕获的是this指针，实际效果相当于引用捕获
+* 之前不出错的原因在于，= 捕获的是 this 指针，实际效果相当于引用捕获
 ```cpp
 struct A {
     auto f()
@@ -80,7 +80,7 @@ auto g()
 
 g()(); // A对象p已被析构，lambda捕获的this失效，i值未定义
 ```
-* this指针会被析构，可以值捕获\*this对象，这才是真正的值捕获
+* this 指针会被析构，可以值捕获 \*this 对象，这才是真正的值捕获
 ```cpp
 struct A {
     auto f()
@@ -123,7 +123,7 @@ auto g()
 
 g()(); // 1
 ```
-* C++14中提供了广义lambda捕获（generalized lambda-capture），也叫初始化捕获（init-capture），可以直接在捕获列表中拷贝
+* C++14 中提供了广义 lambda 捕获（generalized lambda-capture），也叫初始化捕获（init-capture），可以直接在捕获列表中拷贝
 ```cpp
 struct A {
     auto f()
@@ -143,7 +143,7 @@ auto g = [p = std::make_unique<A>()]{ return p->f(); };
 
 g()(); // 1
 ```
-* 值捕获似乎表明闭包是独立的，与闭包外的数据无关，但并非如此，比如lambda可以直接使用static变量（但无法捕获）
+* 值捕获似乎表明闭包是独立的，与闭包外的数据无关，但并非如此，比如 lambda 可以直接使用 static 变量（但无法捕获）
 ```cpp
 static int i = 1;
 auto f = [] { std::cout << i; }; // OK：可以直接使用i
@@ -151,22 +151,22 @@ auto g = [i] {}; // 错误：无法捕获static变量
 ```
 
 ## 32 用初始化捕获将对象移入闭包
-* move-only类型不支持拷贝，只能采用引用捕获
+* move-only 类型对象不支持拷贝，只能采用引用捕获
 ```cpp
 auto p = std::make_unique<int>(42);
 auto f = [&p]() {std::cout << *p; };
 ```
-* 初始化捕获则支持把move-only类型对象移动进lambda中
+* 初始化捕获则支持把 move-only 类型对象移动进 lambda 中
 ```cpp
 auto p = std::make_unique<int>(42);
 auto f = [p = std::move(p)]() {std::cout << *p; };
 assert(p == nullptr);
 ```
-* 还可以直接在捕获列表中初始化move-only类型对象
+* 还可以直接在捕获列表中初始化 move-only 类型对象
 ```cpp
 auto f = [p = std::make_unique<int>(42)]() {std::cout << *p; };
 ```
-* 如果不使用lambda，C++11中可以封装一个类来模拟lambda的初始化捕获
+* 如果不使用 lambda，C++11 中可以封装一个类来模拟 lambda 的初始化捕获
 ```cpp
 class A {
 public:
@@ -178,13 +178,13 @@ private:
 
 auto f = A(std::make_unique<int>(42));
 ```
-* 如果要在C++11中使用lambda并模拟初始化捕获，需要借助[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)
+* 如果要在 C++11 中使用 lambda 并模拟初始化捕获，需要借助[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)
 ```cpp
 auto f = std::bind(
     [](const std::unique_ptr<int>& p) { std::cout << *p; },
     std::make_unique<int>(42));
 ```
-* bind对象（[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)返回的对象）中包含传递给[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)的所有实参的拷贝，对于每个左值实参，bind对象中的对应部分由拷贝构造，对于右值实参则是移动构造。上例中第二个实参是右值，采用的是移动构造，这就是把右值移动进bind对象的手法
+* bind 对象（[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)返回的对象）中包含传递给[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)的所有实参的拷贝，对于每个左值实参，bind 对象中的对应部分由拷贝构造，对于右值实参则是移动构造。上例中第二个实参是右值，采用的是移动构造，这就是把右值移动进 bind 对象的手法
 ```cpp
 std::vector<int> v; // 要移动到闭包的对象
 // C++14：初始化捕获
@@ -192,7 +192,7 @@ auto f = [v = std::move(v)] {};
 // C++11：模拟初始化捕获
 auto g = std::bind([] (const std::vector<int>& v) {}, std::move(v));
 ```
-* 默认情况下，lambda生成的闭包类的operator()默认为const，闭包中的所有成员变量也会为const，因此上述模拟中使用的lambda形参都为const
+* 默认情况下，lambda 生成的闭包类的 operator() 默认为 const，闭包中的所有成员变量也会为 const，因此上述模拟中使用的 lambda 形参都为 const
 ```cpp
 auto f = [](auto x, auto y) { return x < y; };
 
@@ -202,7 +202,7 @@ struct X {
     auto operator() (T x, U y) const { return x < y; }
 };
 ```
-* 如果是可变lambda，则闭包中的operator()就不会为const，因此模拟可变lambda则模拟中使用的lambda形参就不必声明为const
+* 如果是可变 lambda，则闭包中的 operator() 就不会为 const，因此模拟可变 lambda 则模拟中使用的 lambda 形参就不必声明为 const
 ```cpp
 std::vector<int> v;
 // C++14：初始化捕获
@@ -222,7 +222,7 @@ auto f = [](auto x) { return g(x); };
 // 传入参数是auto，类型未知，std::forward的模板参数应该是什么？
 auto f = [](auto&& x) { return g(std::forward<???>(x)); };
 ```
-* 此时可以用decltype判断传入的实参是左值还是右值
+* 此时可以用 decltype 判断传入的实参是左值还是右值
   * 如果传递给auto&&的实参是左值，则x为左值引用类型，decltype(x)为左值引用类型
   * 如果传递给auto&&的实参是右值，则x为右值引用类型，decltype(x)为右值引用类型
 ```cpp
@@ -236,7 +236,7 @@ auto f = [](auto&&... args) {
 ```
 
 ## 34 用lambda替代[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)
-* lambda代码更简洁
+* lambda 代码更简洁
 ```cpp
 auto f = [l, r] (const auto& x) { return l <= x && x <= r; };
 
@@ -253,7 +253,7 @@ auto f = std::bind(
     std::bind(std::less_equal<int>(), l, _1),
     std::bind(std::less_equal<int>(), _1, r));
 ```
-* lambda可以指定值捕获和引用捕获，而[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)总会按值拷贝实参，要按引用传递则需要使用[std::ref](https://en.cppreference.com/w/cpp/utility/functional/ref)
+* lambda 可以指定值捕获和引用捕获，而[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)总会按值拷贝实参，要按引用传递则需要使用[std::ref](https://en.cppreference.com/w/cpp/utility/functional/ref)
 ```cpp
 void f(const A&);
 
@@ -261,7 +261,7 @@ using namespace std::placeholders;
 A a;
 auto g = std::bind(f, std::ref(a), _1);
 ```
-* lambda中可以正常使用重载函数，而[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)无法区分重载版本，为此必须指定对应的函数指针类型。lambda闭包类的operator()采用的是能被编译器内联的常规的函数调用，而[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)采用的是一般不会被内联的函数指针调用，这意味着lambda比[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)运行得更快
+* lambda 中可以正常使用重载函数，而[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)无法区分重载版本，为此必须指定对应的函数指针类型。lambda 闭包类的 operator() 采用的是能被编译器内联的常规的函数调用，而[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)采用的是一般不会被内联的函数指针调用，这意味着 lambda 比[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)运行得更快
 ```cpp
 void f(int) {}
 void f(double) {}
@@ -299,7 +299,7 @@ auto h = std::bind(
     std::bind(std::plus<>(), std::chrono::steady_clock::now(), std::chrono::seconds(3)),
     std::placeholders::_1);
 ```
-* C++14中没有需要使用[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)的理由，C++11由于特性受限存在两个使用场景，一是模拟C++11缺少的移动捕获，二是函数对象的operator()是模板时，若要将此函数对象作为参数使用，用[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)绑定才能接受任意类型实参
+* C++14 中没有需要使用[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)的理由，C++11 由于特性受限存在两个使用场景，一是模拟 C++11 缺少的移动捕获，二是函数对象的 operator() 是模板时，若要将此函数对象作为参数使用，用[std::bind](https://en.cppreference.com/w/cpp/utility/functional/bind)绑定才能接受任意类型实参
 ```cpp
 struct X {
     template<typename T>
@@ -309,7 +309,7 @@ struct X {
 X x;
 auto f = std::bind(x, _1); // f可以接受任意参数类型
 ```
-* C++11的lambda无法达成上述效果，但C++14可以
+* C++11 的 lambda 无法达成上述效果，但 C++14 可以
 ```cpp
 X a;
 auto f = [a](const auto& x) { a(x); };
@@ -399,18 +399,18 @@ struct X {
 std::function<void(int)> f = X();
 f(1); // 1
 ```
-* 存储lambda
+* 存储 lambda
 ```cpp
 std::function<void(int)> f = [] (int i) { std::cout << i; };
 f(1); // 1
 ```
-* 存储bind对象
+* 存储 bind 对象
 ```cpp
 void f(int i) { std::cout << i; }
 std::function<void(int)> g = std::bind(f, std::placeholders::_1);
 g(1); // 1
 ```
-* 存储绑定成员函数指针的bind对象
+* 存储绑定成员函数指针的 bind 对象
 ```cpp
 struct A {
     void f(int n) { std::cout << n; }
@@ -430,7 +430,7 @@ std::function<void(A&, int)> g = &A::f;
 A a;
 g(a, 1); // 1
 ```
-* 存储const成员函数
+* 存储 const 成员函数
 ```cpp
 struct A {
     void f(int n) const { std::cout << n; }
