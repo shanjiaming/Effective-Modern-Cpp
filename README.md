@@ -67,4 +67,4 @@
 ## [8. 其他轻微调整](https://github.com/downdemo/Effective-Modern-Cpp/tree/master/content/08%20%E5%85%B6%E4%BB%96%E8%BD%BB%E5%BE%AE%E8%B0%83%E6%95%B4.md)
 
 * 41 对于可拷贝的形参，如果移动成本低且一定会被拷贝则考虑传值
-* 42 使用emplace操作替代insert操作
+* 42 用emplace操作替代insert操作
