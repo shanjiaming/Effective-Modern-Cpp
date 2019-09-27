@@ -322,8 +322,8 @@ void f(int a, int b, int c) { std::cout << a << b << c; }
 
 using namespace std::placeholders;
 auto x = std::bind(f, _2, _1, 3);
-// _n表示g的第n个参数
-// g(a, b, c)相当于g(b, a, 3);
+// _n表示f的第n个参数
+// x(a, b, c)相当于f(b, a, 3);
 
 x(4, 5, 6); // 543
 ```
