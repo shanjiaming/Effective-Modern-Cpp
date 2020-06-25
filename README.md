@@ -58,7 +58,7 @@
 * 36 用 [std::launch::async](https://en.cppreference.com/w/cpp/thread/launch) 指定异步求值
 * 37 RAII 线程管理
 * 38 [std::future](https://en.cppreference.com/w/cpp/thread/future) 的析构行为
-* 39 用[std::promise](https://en.cppreference.com/w/cpp/thread/promise) 和 [std::future](https://en.cppreference.com/w/cpp/thread/future) 之间的通信实现一次性通知
+* 39 用 [std::promise](https://en.cppreference.com/w/cpp/thread/promise) 和 [std::future](https://en.cppreference.com/w/cpp/thread/future) 之间的通信实现一次性通知
 * 40 [std::atomic](https://en.cppreference.com/w/cpp/atomic/atomic) 提供原子操作，volatile 禁止优化内存
 
 ## [8. 其他轻微调整](https://github.com/downdemo/Effective-Modern-Cpp/tree/master/content/08%20%E5%85%B6%E4%BB%96%E8%BD%BB%E5%BE%AE%E8%B0%83%E6%95%B4.md)
