@@ -1,8 +1,4 @@
-[Effective Modern C++](https://learning.oreilly.com/library/view/effective-modern-c/9781491908419/) 主要讲述了 C++11/14 新特性的用法，阐述从两方面展开，一是原理解析，二是注意事项。如 auto 的原理使用的是模板推断机制，进而介绍模板的推断机制，再由此引出 auto 在使用上应该注意的问题。不同读者在这本书中可以各取所需，如果希望了解 C++11/14 的方方面面，则可以抽丝剥茧地深究原理，如果希望短时间内快速上手 C++11/14 工程实践，则只需略读原理但牢记结论，使用时绕开易产生问题的用法即可。此为个人笔记，条款非直译，而是个人理解的更贴近作者意图的表述。
-
-## 相关链接
-* GitHub Pages：[https://downdemo.github.io/Effective-Modern-Cpp/](https://downdemo.github.io/Effective-Modern-Cpp/)
-* GitBook 在线阅读：[https://downdemo.gitbook.io/effective-modern-cpp/](https://downdemo.gitbook.io/effective-modern-cpp/)
+*[Effective Modern C++](https://learning.oreilly.com/library/view/effective-modern-c/9781491908419/)* 主要讲述了 C++11/14 新特性的用法，阐述从两方面展开，一是原理解析，二是注意事项。如 auto 的原理使用的是模板推断机制，进而介绍模板的推断机制，再由此引出 auto 在使用上应该注意的问题。不同读者在这本书中可以各取所需，如果希望了解 C++11/14 的方方面面，则可以抽丝剥茧地深究原理，如果希望短时间内快速上手 C++11/14 工程实践，则只需略读原理但牢记结论，使用时绕开易产生问题的用法即可。此为个人笔记，条款非直译，而是个人理解的更贴近作者意图的表述。
 
 ## [1. 类型推断](https://github.com/downdemo/Effective-Modern-Cpp/tree/master/content/01%20%E7%B1%BB%E5%9E%8B%E6%8E%A8%E6%96%AD.md)
 

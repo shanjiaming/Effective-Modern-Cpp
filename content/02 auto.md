@@ -56,7 +56,7 @@ for (const std::pair<std::string, int>& p : m) ... // 类型不一致，仍要�
 
 ## 06 [auto](https://en.cppreference.com/w/cpp/language/auto) 推断出非预期类型时，先强制转换出预期类型
 
-* 如下代码没有问题
+* auto 推断得到的类型可能与直觉认知不同
 
 ```cpp
 std::vector<bool> f()
@@ -64,29 +64,11 @@ std::vector<bool> f()
   return std::vector<bool>{ true, false };
 }
 
-bool x = f()[0];
-if (x)
-{
-  std::cout << "OK";
-}
-```
+bool a = f()[0];
+auto b = f()[0];
 
-* 但如果把显式声明改为 auto 则会出现非预期行为
-
-```cpp
-std::vector<bool> f()
-{
-  return std::vector<bool>{ true, false };
-}
-
-auto x = f()[0]; // 改用 auto 声明
-if (x) {} // 错误：未定义行为
-```
-
-* 原因在于实际上得到的类型不是 bool
-
-```cpp
-auto x = f()[0]; // x 类型为 std::vector<bool>::reference
+if (a) {} // OK
+if (b) {} // 错误：未定义行为，b 类型是 std::vector<bool>::reference
 ```
 
 * [std::vector\<bool\>](https://en.cppreference.com/w/cpp/container/vector_bool 不是真正的 STL 容器，也不包含 bool 类型元素。它是 [std::vector](https://en.cppreference.com/w/cpp/container/vector) 对于 bool 类型的特化，为了节省空间，每个元素用一个 bit（而非一个 bool）表示，于是 [operator[]](https://en.cppreference.com/w/cpp/container/vector/operator_at) 返回的应该是单个 bit 的引用，但 C++ 中不存在指向单个 bit 的指针，因此也不能获取单个 bit 的引用
@@ -103,7 +85,7 @@ std::vector<bool>::reference* q = &v[0]; // 正确
 bool x = f()[0];
 ```
 
-* 而对于 auto 推断则不会进行隐式转换
+* 而 auto 推断不会进行隐式转换
 
 ```cpp
 auto x = f()[0]; // std::vector<bool>::reference x = f()[0];
@@ -123,7 +105,7 @@ Matrix sum = m1 + m2 + m3 + m4;
 * Matrix 对象的 operator+ 返回的是结果的代理而非结果本身，这样可以使得表达式的计算更为高效
 
 ```cpp
-auto x = m1 + m2; // x可能是Sum<Matrix, Matrix>而不是Matrix对象
+auto x = m1 + m2; // x可能是 Sum<Matrix, Matrix> 而不是 Matrix 对象
 ```
 
 * auto 推断出代理类的问题实际很容易解决，事先做一次到预期类型的强制转换即可
